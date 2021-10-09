@@ -1,8 +1,8 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Axios from "axios";
 import { BASE_URL } from "./shared/constants";
 import Home from "./components/home/home";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   Axios.defaults.baseURL = `${BASE_URL}/machstatz`;

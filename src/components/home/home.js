@@ -3,33 +3,62 @@ import axios from "axios";
 import { getInitial, getProfilePhotoColor } from "../../shared/constants";
 import { urls } from "../../shared/urls";
 import "./home.css";
+import ConfirmationModal from "../confirmationModal/confirmationModal";
+import CreateUser from "../createUser/createUser";
+import { Button } from "react-bootstrap";
 
-// const data = [
-//   {
-//     _id: {
-//       $oid: "615084b7cfae4ed0f0e2c088",
-//     },
-//     email: "user1@email.com",
-//     fist_name: "fname",
-//     last_name: "lname",
-//     username: "user1",
-//   },
-// ];
+var holdEmail;
 
 const Home = () => {
   const [data, setData] = useState(null);
+  const [confirmation, setConfirmation] = useState(false);
+  const [createUser, setCreateUser] = useState(false);
+
+  const toggleCreateUser = () => {
+    setCreateUser((prev) => !prev);
+  };
+
+  const toggleConfimationModal = (email) => {
+    if (email) holdEmail = email;
+    console.log(holdEmail);
+    setConfirmation((prev) => !prev);
+  };
+
   const fetchUsers = async () => {
-    const response = await axios.get(urls.allUsers);
-    if (response.data) {
-      console.log(response.data);
-      setData(response.data);
+    try {
+      const response = await axios.get(urls.allUsers);
+      if (response.data) {
+        console.log(response.data);
+        setData(response.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
+
+  const deleteUser = async () => {
+    console.log(holdEmail);
+    try {
+      const response = await axios.delete(urls.deleteUser(holdEmail));
+      if (response.data) {
+        setConfirmation(false);
+        fetchUsers();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
   return (
     <>
+      <div>
+        <Button color="primary" onClick={() => toggleCreateUser()}>
+          Add New User
+        </Button>
+      </div>
       {data && data.length > 0 ? (
         <div className="row">
           {data &&
@@ -53,13 +82,33 @@ const Home = () => {
                     <div className="edit">
                       <img src="/pen.svg" alt="edit_icon" />
                     </div>
-                    <div className="delete">
+                    <div
+                      className="delete"
+                      onClick={() => toggleConfimationModal(data.email)}
+                    >
                       <img src="/trash.svg" alt="delete_icon" />
                     </div>
                   </div>
                 </div>
               </div>
             ))}
+
+          {/* confirmationModal */}
+
+          <ConfirmationModal
+            title="Confirm Delete"
+            modalDescription="Are you you want to delete the user ?"
+            buttonText="Delete"
+            forwardFnc={deleteUser}
+            toggle={toggleConfimationModal}
+            modal={confirmation}
+          />
+
+          <CreateUser
+            modal={createUser}
+            toggle={toggleCreateUser}
+            fetchAgain={fetchUsers}
+          />
         </div>
       ) : (
         <div className="noUsers">No Users to display</div>
