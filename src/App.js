@@ -3,6 +3,7 @@ import "./App.css";
 import Axios from "axios";
 import { BASE_URL } from "./shared/constants";
 import Home from "./components/home/home";
+import Navbar from "./components/navbar/navbar";
 
 function App() {
   Axios.defaults.baseURL = `${BASE_URL}/machstatz`;
@@ -31,7 +32,10 @@ function App() {
   return (
     <div className="App">
       <div className="body">
-        <Home />
+        <Navbar />
+        <div className="mainContent">
+          <Home />
+        </div>
       </div>
     </div>
   );

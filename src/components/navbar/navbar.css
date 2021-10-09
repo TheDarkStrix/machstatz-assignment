@@ -1,0 +1,11 @@
+.navbar {
+  height: 40px;
+  background-color: cornflowerblue;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-weight: 700;
+  font-size: 1.1em;
+}

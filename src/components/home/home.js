@@ -54,7 +54,7 @@ const Home = () => {
   }, []);
   return (
     <>
-      <div>
+      <div className="mt-3 d-flex justify-content-end">
         <Button color="primary" onClick={() => toggleCreateUser()}>
           Add New User
         </Button>
